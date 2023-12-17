@@ -4,6 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.*;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +21,7 @@ import java.util.*;
 public class Main {
     public enum operations{
     }
-    private static boolean isMathExpression(String expression){
+    public static boolean isMathExpression(String expression){
        String[] tokens = expression.split("[+\\-*/()^\\s]+|sin|cos|tan|exp|ln");
        for (var token: tokens){
            if (!token.matches("-?\\d+(\\.\\d+)?") && !token.isEmpty()){
@@ -25,7 +31,7 @@ public class Main {
 
        return isTrueMathExpression(expression);
     }
-    private static boolean isTrueMathExpression(String expression){
+    public static boolean isTrueMathExpression(String expression){
         Stack<Character> stack = new Stack<>();
         char prevChar = ' ';
         char prevNonSpaceChar = '0';
@@ -66,7 +72,15 @@ public class Main {
             }
         }
     }
-    public static void main(String[] args) throws IOException, JSONException, ParseException {
+    public static void xmlFileReader(String filePath, ArrayList<String> mathExpressions) throws ParserConfigurationException, SAXException, IOException {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser parser = factory.newSAXParser();
+
+        XMLHandler handler = new XMLHandler();
+        parser.parse(new File(filePath), handler);
+        mathExpressions.addAll(handler.getExpressions());
+    }
+    public static void main(String[] args) throws IOException, JSONException, ParseException, ParserConfigurationException, SAXException {
         if (args.length != 1){
             System.out.println("Pass the file path...");
             return;
@@ -80,8 +94,7 @@ public class Main {
         } catch (IOException e) {
             System.out.println("Error when trying to determine the file type..." + e.getMessage());
         }
-        
-        
+
         FileReader fr = new FileReader(args[0]);
         FileWriter fw = new FileWriter("output.txt");
         Scanner in = new Scanner(fr);
@@ -90,9 +103,10 @@ public class Main {
         switch (Objects.requireNonNull(fileType)){
             case "text/plain" ->  textFileReader(fr, in, mathExpressions);
             case "application/json" ->  jsonFileReader(fr, mathExpressions);
+            case "text/xml" ->  xmlFileReader(filePath, mathExpressions);
             default -> throw new IllegalStateException("Unexpected value: " + filePath);
         }
-        
+
         for(var expression: mathExpressions){
             fw.write((new ExpressionTask(expression).calculate()).toString() + '\n');
         }

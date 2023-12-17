@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<expressions>
+    <item str = "1 + 2 + 3 + 4 - 10" />
+    <item str = "exp(1)" />
+    <item str = "cos(0) + sin(1)" />
+</expressions>
