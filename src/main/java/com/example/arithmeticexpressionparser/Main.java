@@ -1,9 +1,15 @@
-package org.example;
+package com.example.arithmeticexpressionparser;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.parser.*;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,18 +24,33 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.*;
 
-public class Main {
+public class Main extends Application {
+    private static TextArea fileTextArea = new TextArea();
+    private static TextArea ansTextArea = new TextArea();
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Expression Task Parser");
+
+        GridPane grid = new GridPane();
+        grid.add(fileTextArea, 0, 0);
+        grid.add(ansTextArea, 1, 0);
+
+
+        Scene scene = new Scene(grid, 600, 400);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
     public enum operations{
     }
     public static boolean isMathExpression(String expression){
-       String[] tokens = expression.split("[+\\-*/()^\\s]+|sin|cos|tan|exp|ln");
-       for (var token: tokens){
-           if (!token.matches("-?\\d+(\\.\\d+)?") && !token.isEmpty()){
+        String[] tokens = expression.split("[+\\-*/()^\\s]+|sin|cos|tan|exp|ln");
+        for (var token: tokens){
+            if (!token.matches("-?\\d+(\\.\\d+)?") && !token.isEmpty()){
                 return false;
-           }
-       }
+            }
+        }
 
-       return isTrueMathExpression(expression);
+        return isTrueMathExpression(expression);
     }
     public static boolean isTrueMathExpression(String expression){
         Stack<Character> stack = new Stack<>();
@@ -55,20 +76,25 @@ public class Main {
         return stack.isEmpty();
     }
     public static void textFileReader(FileReader fr, Scanner in, ArrayList<String> mathExpressions) {
+        StringBuilder text  = new StringBuilder();
         while(in.hasNextLine()){
             String line = in.nextLine();
+            text.append(line).append('\n');
             if (isMathExpression(line)){
                 mathExpressions.add(line);
             }
         }
+        fileTextArea.setText(text.toString());
     }
     public static void jsonFileReader(FileReader fr, ArrayList<String> mathExpressions) throws IOException, ParseException, JSONException {
         Object obj = new JSONParser().parse(fr);
         JSONObject jsonObject = new JSONObject(obj.toString());
         JSONArray jsonArray = jsonObject.getJSONArray("expressions");
         for (int i = 0; i < jsonArray.length(); i++){
-            if (isMathExpression((String) jsonArray.get(i))){
-                mathExpressions.add((String) jsonArray.get(i));
+            String line = (String) jsonArray.get(i);
+            if (isMathExpression(line)){
+                fileTextArea.setText(line+ '\n');
+                mathExpressions.add(line);
             }
         }
     }
@@ -107,10 +133,16 @@ public class Main {
             default -> throw new IllegalStateException("Unexpected value: " + filePath);
         }
 
+        StringBuilder text  = new StringBuilder();
         for(var expression: mathExpressions){
-            fw.write((new ExpressionTask(expression).calculate()).toString() + '\n');
+            String ans = new ExpressionTask(expression).calculate().toString();
+            text.append(ans).append('\n');
+            fw.write(ans + '\n');
         }
 
+        ansTextArea.setText(text.toString());
+
         fw.close();
+        launch(args);
     }
 }

@@ -1,20 +1,25 @@
-package org.example;
+package com.example.arithmeticexpressionparser;
 
 import java.util.Stack;
 
 public class ExpressionTask implements Expression {
+    private String expression;
     private final char[] tokens;
     private final Stack<Character> operators;
     private final Stack<Double> values;
     public ExpressionTask(String str){
-        this.tokens = str.toCharArray();
+        this.expression = str;
+        this.tokens = getText().toCharArray();
         operators = new Stack<>();
         values = new Stack<>();
         values.push(0.0);
     }
     @Override
     public String getText() {
-        return null;
+        expression = expression.trim();
+        expression = expression.replaceAll("\\s+", " ");
+
+        return this.expression;
     }
 
     @Override
@@ -86,4 +91,3 @@ public class ExpressionTask implements Expression {
         };
     }
 }
-

@@ -1,4 +1,4 @@
-package org.example;
+package com.example.arithmeticexpressionparser;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

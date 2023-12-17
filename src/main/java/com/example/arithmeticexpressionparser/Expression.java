@@ -1,4 +1,4 @@
-package org.example;
+package com.example.arithmeticexpressionparser;
 
 public interface Expression {
     String getText();
