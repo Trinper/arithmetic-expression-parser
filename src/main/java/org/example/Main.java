@@ -1,15 +1,16 @@
 package org.example;
 
-
-import javax.script.ScriptException;
-import java.io.FileNotFoundException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.simple.parser.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 public class Main {
     public enum operations{
@@ -55,13 +56,43 @@ public class Main {
             }
         }
     }
+    public static void jsonFileReader(FileReader fr, ArrayList<String> mathExpressions) throws IOException, ParseException, JSONException {
+        Object obj = new JSONParser().parse(fr);
+        JSONObject jsonObject = new JSONObject(obj.toString());
+        JSONArray jsonArray = jsonObject.getJSONArray("expressions");
+        for (int i = 0; i < jsonArray.length(); i++){
+            if (isMathExpression((String) jsonArray.get(i))){
+                mathExpressions.add((String) jsonArray.get(i));
+            }
+        }
+    }
+    public static void main(String[] args) throws IOException, JSONException, ParseException {
+        if (args.length != 1){
+            System.out.println("Pass the file path...");
+            return;
+        }
 
-    public static void main(String[] args) throws IOException {
+        String filePath = args[0];
+        Path path = Paths.get(filePath);
+        String fileType = null;
+        try {
+            fileType = Files.probeContentType(path);
+        } catch (IOException e) {
+            System.out.println("Error when trying to determine the file type..." + e.getMessage());
+        }
+        
+        
         FileReader fr = new FileReader(args[0]);
         FileWriter fw = new FileWriter("output.txt");
         Scanner in = new Scanner(fr);
         ArrayList<String> mathExpressions = new ArrayList<>();
-        textFileReader(fr, in, mathExpressions);
+
+        switch (Objects.requireNonNull(fileType)){
+            case "text/plain" ->  textFileReader(fr, in, mathExpressions);
+            case "application/json" ->  jsonFileReader(fr, mathExpressions);
+            default -> throw new IllegalStateException("Unexpected value: " + filePath);
+        }
+        
         for(var expression: mathExpressions){
             fw.write((new ExpressionTask(expression).calculate()).toString() + '\n');
         }

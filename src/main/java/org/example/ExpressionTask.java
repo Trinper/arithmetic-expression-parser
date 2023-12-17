@@ -48,7 +48,7 @@ public class ExpressionTask implements Expression {
                 }
                 operators.pop();
             } else if ("+-*/sctle".indexOf(tokens[i]) != -1) {
-                if (tokens[i] == 'c') i += 2;
+                if (tokens[i] == 'c') i += 3;
                 while (!operators.isEmpty() && hasPrecedence(tokens[i], operators.peek())) {
                     values.push(applyOperation(operators.pop(), values.pop(), values.pop()));
                 }
