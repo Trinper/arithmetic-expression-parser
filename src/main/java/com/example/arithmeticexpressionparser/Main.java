@@ -25,8 +25,8 @@ import java.io.FileWriter;
 import java.util.*;
 
 public class Main extends Application {
-    private static TextArea fileTextArea = new TextArea();
-    private static TextArea ansTextArea = new TextArea();
+    private static final TextArea fileTextArea = new TextArea();
+    private static final TextArea ansTextArea = new TextArea();
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Expression Task Parser");
@@ -75,7 +75,7 @@ public class Main extends Application {
 
         return stack.isEmpty();
     }
-    public static void textFileReader(FileReader fr, Scanner in, ArrayList<String> mathExpressions) {
+    public static void textFileReader(Scanner in, ArrayList<String> mathExpressions) {
         StringBuilder text  = new StringBuilder();
         while(in.hasNextLine()){
             String line = in.nextLine();
@@ -127,15 +127,19 @@ public class Main extends Application {
         ArrayList<String> mathExpressions = new ArrayList<>();
 
         switch (Objects.requireNonNull(fileType)){
-            case "text/plain" ->  textFileReader(fr, in, mathExpressions);
+            case "text/plain" ->  textFileReader(in, mathExpressions);
             case "application/json" ->  jsonFileReader(fr, mathExpressions);
             case "text/xml" ->  xmlFileReader(filePath, mathExpressions);
             default -> throw new IllegalStateException("Unexpected value: " + filePath);
         }
 
         StringBuilder text  = new StringBuilder();
-        for(var expression: mathExpressions){
-            String ans = new ExpressionTask(expression).calculate().toString();
+        for(var exp: mathExpressions){
+            ExpressionTask expression = ExpressionTaskBuilder.create()
+                    .setExpression(exp)
+                    .build();
+
+            String ans = expression.calculate().toString();
             text.append(ans).append('\n');
             fw.write(ans + '\n');
         }
