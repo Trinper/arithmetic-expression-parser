@@ -121,10 +121,26 @@ public class Main extends Application {
             System.out.println("Error when trying to determine the file type..." + e.getMessage());
         }
 
+        System.out.println(fileType);
+        switch (Objects.requireNonNull(fileType)) {
+            case "application/x-zip-compressed" -> {
+                filePath = FileUnzipper.unzipFile(args[0], "C:\\Java_code\\repos\\arithmetic-expression-parser\\inputs");
+                args[0] = filePath;
+                path = Paths.get(filePath);
+                try {
+                    fileType = Files.probeContentType(path);
+                } catch (IOException e) {
+                    System.out.println("Error when trying to determine the file type..." + e.getMessage());
+                }
+            }
+
+        }
+
         FileReader fr = new FileReader(args[0]);
         FileWriter fw = new FileWriter("output.txt");
         Scanner in = new Scanner(fr);
         ArrayList<String> mathExpressions = new ArrayList<>();
+        System.out.println(fileType);
 
         switch (Objects.requireNonNull(fileType)){
             case "text/plain" ->  textFileReader(in, mathExpressions);
