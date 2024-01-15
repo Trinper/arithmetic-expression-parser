@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class FileUnzipper {
+public class ExtractFileFromArchive {
     public static String unzipFile(String zipFilePath, String destFolderPath) throws IOException {
         File destFolder = new File(destFolderPath);
         if (!destFolder.exists()) {

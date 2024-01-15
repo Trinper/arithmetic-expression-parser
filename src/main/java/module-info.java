@@ -4,6 +4,8 @@ module com.example.arithmeticexpressionparser {
     requires android.json;
     requires json.simple;
     requires java.xml;
+    requires junrar;
+    requires org.apache.commons.compress;
 
 
     opens com.example.arithmeticexpressionparser to javafx.fxml;

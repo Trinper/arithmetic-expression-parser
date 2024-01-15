@@ -12,7 +12,7 @@ public class XMLHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (qName.equals("item")) {
             String str = attributes.getValue("str");
-            if (Main.isMathExpression(str)) {
+            if (ExpressionValidator.isMathExpression(str) && ExpressionValidator.isTrueMathExpression(str)) {
                 expressions.add(str);
             }
         }
