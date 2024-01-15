@@ -27,15 +27,12 @@ public class Model {
         return this.mathExpressions;
     }
     public static void textFileReader(Scanner in, ArrayList<String> mathExpressions) {
-        StringBuilder text  = new StringBuilder();
         while(in.hasNextLine()){
             String line = in.nextLine();
-            text.append(line).append('\n');
             if (ExpressionValidator.isMathExpression(line) && ExpressionValidator.isTrueMathExpression(line)){
                 mathExpressions.add(line);
             }
         }
-        Main.fileTextArea.setText(text.toString());
     }
     public static void jsonFileReader(FileReader fr, ArrayList<String> mathExpressions) throws IOException, ParseException, JSONException {
         Object obj = new JSONParser().parse(fr);
@@ -96,5 +93,13 @@ public class Model {
     public void write(String str) throws IOException {
         FileWriter fw = new FileWriter("output.txt");
         fw.write(str + '\n');
+    }
+    public void windowInput(){
+        StringBuilder text  = new StringBuilder();
+        for (var line: mathExpressions){
+            text.append(line).append('\n');
+        }
+
+        Main.fileTextArea.setText(text.toString());
     }
 }
