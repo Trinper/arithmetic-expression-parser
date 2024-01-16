@@ -19,7 +19,6 @@ public class Main extends Application {
     protected static final TextArea inputTextArea = new TextArea();
     protected static final TextArea fileTextArea = new TextArea();
     protected static final TextArea ansTextArea = new TextArea();
-    private static Controller controller;
 
     @Override
     public void start(Stage primaryStage) {
@@ -54,15 +53,13 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    public enum operations{
-    }
     public static void main(String[] args) throws IOException, JSONException, ParseException, ParserConfigurationException, SAXException {
         if (args[0] == null){
             System.out.println("Pass the file path...");
             return;
         }
 
-        controller = new Controller(args[0]);
+        Controller controller = new Controller(args[0]);
         launch(args);
     }
 }

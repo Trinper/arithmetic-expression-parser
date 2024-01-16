@@ -72,22 +72,56 @@ public class ExpressionTask implements Expression {
 
     }
     private static double applyOperation(char operator, double b, double a) {
-        return switch (operator) {
-            case '+' -> a + b;
-            case '-' -> a - b;
-            case '*' -> a * b;
-            case '/' -> {
+        Operations operation = getOperation(operator);
+        switch (operation) {
+            case ADDITION:
+                return a + b;
+            case SUBTRACTION:
+                return a - b;
+            case MULTIPLICATION:
+                return a * b;
+            case DIVISION:
                 if (b == 0) {
                     throw new ArithmeticException("Division by zero is not allowed");
                 }
-                yield a / b;
-            }
-            case 's' -> Math.sin(b);
-            case 'c' -> Math.cos(b);
-            case 't' -> Math.tan(b);
-            case 'e' -> Math.exp(b);
-            case 'l' -> Math.log(b);
-            default -> 0;
-        };
+                return a / b;
+            case SIN:
+                return Math.sin(b);
+            case COS:
+                return Math.cos(b);
+            case TAN:
+                return Math.tan(b);
+            case EXP:
+                return Math.exp(b);
+            case LN:
+                return Math.log(b);
+            default:
+                throw new IllegalArgumentException("Invalid operation");
+        }
+    }
+
+    private static Operations getOperation(char operator) {
+        switch (operator) {
+            case '+':
+                return Operations.ADDITION;
+            case '-':
+                return Operations.SUBTRACTION;
+            case '*':
+                return Operations.MULTIPLICATION;
+            case '/':
+                return Operations.DIVISION;
+            case 's':
+                return Operations.SIN;
+            case 'c':
+                return Operations.COS;
+            case 't':
+                return Operations.TAN;
+            case 'e':
+                return Operations.EXP;
+            case 'l':
+                return Operations.LN;
+            default:
+                throw new IllegalArgumentException("Invalid operator");
+        }
     }
 }

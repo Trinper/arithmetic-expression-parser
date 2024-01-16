@@ -68,7 +68,6 @@ public class Model {
             System.out.println("Error when trying to determine the file type..." + e.getMessage());
         }
 
-        System.out.println(fileType);
         switch (Objects.requireNonNull(fileType)) {
             case "application/x-zip-compressed" : filePath = ExtractFileFromArchive.unzipFile(args, "C:\\Java_code\\repos\\arithmetic-expression-parser\\inputs");
             case "application/vnd.rar" : filePath = ExtractFileFromArchive.unzipFile(args, "C:\\Java_code\\repos\\arithmetic-expression-parser\\inputs");
@@ -85,7 +84,6 @@ public class Model {
         FileReader fr = new FileReader(args);
         Scanner in = new Scanner(fr);
 
-        System.out.println(fileType);
 
         switch (Objects.requireNonNull(fileType)){
             case "text/plain" ->  textFileReader(in, mathExpressions);
@@ -96,6 +94,7 @@ public class Model {
     }
     public void write(String str) throws IOException {
         FileWriter fw = new FileWriter("output.txt");
+        System.out.println(str);
         fw.write(str + '\n');
     }
     public void outCorrectExpressions(){
