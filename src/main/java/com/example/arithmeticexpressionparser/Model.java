@@ -22,8 +22,8 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Model {
-    private static ArrayList<String> expressions = new ArrayList<>();
-    private ArrayList<String> mathExpressions = new ArrayList<>();
+    private static final ArrayList<String> expressions = new ArrayList<>();
+    private final ArrayList<String> mathExpressions = new ArrayList<>();
     public ArrayList<String> getMathExpressions(){
         return this.mathExpressions;
     }
@@ -69,12 +69,12 @@ public class Model {
         }
 
         switch (Objects.requireNonNull(fileType)) {
-            case "application/x-zip-compressed" : filePath = ExtractFileFromArchive.unzipFile(args, "C:\\Java_code\\repos\\arithmetic-expression-parser\\inputs");
             case "application/vnd.rar" : filePath = ExtractFileFromArchive.unzipFile(args, "C:\\Java_code\\repos\\arithmetic-expression-parser\\inputs");
+            case "application/x-zip-compressed" : filePath = ExtractFileFromArchive.unzipFile(args, "C:\\Java_code\\repos\\arithmetic-expression-parser\\inputs");
         }
 
         args = filePath;
-        path = Paths.get(filePath);
+        path = Paths.get(Objects.requireNonNull(filePath));
         try {
             fileType = Files.probeContentType(path);
         } catch (IOException e) {

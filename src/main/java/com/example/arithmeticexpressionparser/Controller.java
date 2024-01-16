@@ -8,7 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
 public class Controller {
-    private Model model;
+    private final Model model;
     Controller(String args) throws IOException, JSONException, ParseException, ParserConfigurationException, SAXException {
         model = new Model(args);
         model.outInput();

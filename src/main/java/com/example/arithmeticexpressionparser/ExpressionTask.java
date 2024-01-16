@@ -6,12 +6,11 @@ public class ExpressionTask implements Expression {
     private String expression;
     private final char[] tokens;
     private final Stack<Character> operators;
-    private final Stack<Double> values;
+    private static final Stack<Double> values = new Stack<>();
     public ExpressionTask(String str){
         this.expression = str;
         this.tokens = getText().toCharArray();
         operators = new Stack<>();
-        values = new Stack<>();
         values.push(0.0);
     }
     @Override
@@ -53,14 +52,15 @@ public class ExpressionTask implements Expression {
                 }
                 operators.pop();
             } else if ("+-*/sctle".indexOf(tokens[i]) != -1) {
-                if (tokens[i] == 'c') i += 3;
                 while (!operators.isEmpty() && hasPrecedence(tokens[i], operators.peek())) {
                     values.push(applyOperation(operators.pop(), values.pop(), values.pop()));
                 }
                 operators.push(tokens[i]);
+                if (tokens[i] == 'c') i += 2;
                 unaryMinus = true;
             }
         }
+
 
         while (!operators.isEmpty()) {
             values.push(applyOperation(operators.pop(), values.pop(), values.pop()));
@@ -68,8 +68,13 @@ public class ExpressionTask implements Expression {
         return values.pop();
     }
     private static boolean hasPrecedence(char op1, char op2) {
-        return ("*/sctel".indexOf(op1) != -1 && "+-".indexOf(op2) != -1);
-
+        if ((op1 == 's' || op1 == 'c' || op1 == 't' || op1 == 'e' || op1 == 'l')) {
+            return false;
+        }
+        if (op2 == '(' || op2 == ')') {
+            return false;
+        }
+        return (op1 != '*' && op1 != '/') || (op2 != '+' && op2 != '-');
     }
     private static double applyOperation(char operator, double b, double a) {
         Operations operation = getOperation(operator);
@@ -86,14 +91,19 @@ public class ExpressionTask implements Expression {
                 }
                 return a / b;
             case SIN:
+                values.push(a);
                 return Math.sin(b);
             case COS:
+                values.push(a);
                 return Math.cos(b);
             case TAN:
+                values.push(a);
                 return Math.tan(b);
             case EXP:
+                values.push(a);
                 return Math.exp(b);
             case LN:
+                values.push(a);
                 return Math.log(b);
             default:
                 throw new IllegalArgumentException("Invalid operation");
