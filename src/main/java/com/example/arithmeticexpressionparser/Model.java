@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Model {
+    private static ArrayList<String> expressions = new ArrayList<>();
     private ArrayList<String> mathExpressions = new ArrayList<>();
     public ArrayList<String> getMathExpressions(){
         return this.mathExpressions;
@@ -29,6 +30,7 @@ public class Model {
     public static void textFileReader(Scanner in, ArrayList<String> mathExpressions) {
         while(in.hasNextLine()){
             String line = in.nextLine();
+            expressions.add(line);
             if (ExpressionValidator.isMathExpression(line) && ExpressionValidator.isTrueMathExpression(line)){
                 mathExpressions.add(line);
             }
@@ -40,6 +42,7 @@ public class Model {
         JSONArray jsonArray = jsonObject.getJSONArray("expressions");
         for (int i = 0; i < jsonArray.length(); i++){
             String line = (String) jsonArray.get(i);
+            expressions.add(line);
             if (ExpressionValidator.isMathExpression(line) && ExpressionValidator.isTrueMathExpression(line)){
                 mathExpressions.add(line);
             }
@@ -51,7 +54,8 @@ public class Model {
 
         XMLHandler handler = new XMLHandler();
         parser.parse(new File(filePath), handler);
-        mathExpressions.addAll(handler.getExpressions());
+        expressions.addAll(handler.getExpressions());
+        mathExpressions.addAll(handler.getMathExpressions());
     }
 
     Model(String args) throws IOException, JSONException, ParseException, ParserConfigurationException, SAXException {
@@ -94,12 +98,20 @@ public class Model {
         FileWriter fw = new FileWriter("output.txt");
         fw.write(str + '\n');
     }
-    public void windowInput(){
+    public void outCorrectExpressions(){
         StringBuilder text  = new StringBuilder();
         for (var line: mathExpressions){
             text.append(line).append('\n');
         }
 
         Main.fileTextArea.setText(text.toString());
+    }
+    public void outInput(){
+        StringBuilder text  = new StringBuilder();
+        for (var line: expressions){
+            text.append(line).append('\n');
+        }
+
+        Main.inputTextArea.setText(text.toString());
     }
 }

@@ -11,7 +11,8 @@ public class Controller {
     private Model model;
     Controller(String args) throws IOException, JSONException, ParseException, ParserConfigurationException, SAXException {
         model = new Model(args);
-        model.windowInput();
+        model.outInput();
+        model.outCorrectExpressions();
         StringBuilder text  = new StringBuilder();
         for(var exp: model.getMathExpressions()){
             ExpressionTask expression = ExpressionTaskBuilder.create()
