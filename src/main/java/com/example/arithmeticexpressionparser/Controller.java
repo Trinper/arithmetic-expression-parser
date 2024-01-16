@@ -11,8 +11,8 @@ public class Controller {
     private final Model model;
     Controller(String args) throws IOException, JSONException, ParseException, ParserConfigurationException, SAXException {
         model = new Model(args);
-        model.outInput();
-        model.outCorrectExpressions();
+        outInput();
+        outCorrectExpressions();
         StringBuilder text  = new StringBuilder();
         for(var exp: model.getMathExpressions()){
             ExpressionTask expression = ExpressionTaskBuilder.create()
@@ -26,5 +26,22 @@ public class Controller {
 
         Main.ansTextArea.setText(text.toString());
 
+    }
+
+    public void outCorrectExpressions(){
+        StringBuilder text  = new StringBuilder();
+        for (var line: model.getMathExpressions()){
+            text.append(line).append('\n');
+        }
+
+        Main.fileTextArea.setText(text.toString());
+    }
+    public void outInput(){
+        StringBuilder text  = new StringBuilder();
+        for (var line: model.getExpressions()){
+            text.append(line).append('\n');
+        }
+
+        Main.inputTextArea.setText(text.toString());
     }
 }

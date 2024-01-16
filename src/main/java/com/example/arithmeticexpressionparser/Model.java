@@ -27,6 +27,9 @@ public class Model {
     public ArrayList<String> getMathExpressions(){
         return this.mathExpressions;
     }
+    public ArrayList<String> getExpressions(){
+        return this.expressions;
+    }
     public static void textFileReader(Scanner in, ArrayList<String> mathExpressions) {
         while(in.hasNextLine()){
             String line = in.nextLine();
@@ -97,20 +100,5 @@ public class Model {
         System.out.println(str);
         fw.write(str + '\n');
     }
-    public void outCorrectExpressions(){
-        StringBuilder text  = new StringBuilder();
-        for (var line: mathExpressions){
-            text.append(line).append('\n');
-        }
 
-        Main.fileTextArea.setText(text.toString());
-    }
-    public void outInput(){
-        StringBuilder text  = new StringBuilder();
-        for (var line: expressions){
-            text.append(line).append('\n');
-        }
-
-        Main.inputTextArea.setText(text.toString());
-    }
 }

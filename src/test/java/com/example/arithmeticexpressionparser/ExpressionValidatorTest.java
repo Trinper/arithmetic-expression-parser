@@ -38,12 +38,13 @@ class ExpressionValidatorTest {
     @Test
     void isTrueMathExpression3() {
         assertFalse(ExpressionValidator.isTrueMathExpression("1 ++ 3"));
-    }@Test
+    }
+    @Test
     void isTrueMathExpression4() {
         assertFalse(ExpressionValidator.isTrueMathExpression("(2 + ( 1 )"));
-    }@Test
+    }
+    @Test
     void isTrueMathExpression5() {
         assertTrue(ExpressionValidator.isTrueMathExpression("(sin(1) / exp(1 + 4)) * cos(0)"));
-
     }
 }

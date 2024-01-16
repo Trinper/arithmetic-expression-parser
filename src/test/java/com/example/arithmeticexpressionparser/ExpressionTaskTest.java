@@ -40,25 +40,25 @@ class ExpressionTaskTest {
     public void testCalculate_SimpleExpression() {
         ExpressionTask expressionTask = new ExpressionTask("2 + 3 * 4");
         Double result = expressionTask.calculate();
-        assertEquals(14.0, result, 0.0001);
+        assertEquals(2 + 3 * 4, result, 0.0001);
     }
     @Test
     public void testCalculate_NegativeNumbers() {
         ExpressionTask expressionTask = new ExpressionTask("-2 + (-3) * 4");
         Double result = expressionTask.calculate();
-        assertEquals(-14.0, result, 0.0001);
+        assertEquals(-2 + (-3) * 4, result, 0.0001);
     }
     @Test
     public void testCalculate_Functions() {
         ExpressionTask expressionTask = new ExpressionTask("sin(0.5) + cos(0.25)");
         Double result = expressionTask.calculate();
-        assertEquals(1.4483379603148476, result, 0.000000001);
+        assertEquals(Math.sin(0.5) + Math.cos(0.25), result, 0.000000001);
     }
     @Test
     public void testCalculate_Brackets() {
         ExpressionTask expressionTask = new ExpressionTask("(2 + 3) * 4");
         Double result = expressionTask.calculate();
-        assertEquals(20.0, result, 0.0001);
+        assertEquals((2 + 3) * 4, result, 0.0001);
     }
     @Test
     public void testCalculate_DivisionByZero() {
