@@ -78,60 +78,51 @@ public class ExpressionTask implements Expression {
     }
     private static double applyOperation(char operator, double b, double a) {
         Operations operation = getOperation(operator);
-        switch (operation) {
-            case ADDITION:
-                return a + b;
-            case SUBTRACTION:
-                return a - b;
-            case MULTIPLICATION:
-                return a * b;
-            case DIVISION:
+        return switch (operation) {
+            case ADDITION -> a + b;
+            case SUBTRACTION -> a - b;
+            case MULTIPLICATION -> a * b;
+            case DIVISION -> {
                 if (b == 0) {
                     throw new ArithmeticException("Division by zero is not allowed");
                 }
-                return a / b;
-            case SIN:
+                yield a / b;
+            }
+            case SIN -> {
                 values.push(a);
-                return Math.sin(b);
-            case COS:
+                yield Math.sin(b);
+            }
+            case COS -> {
                 values.push(a);
-                return Math.cos(b);
-            case TAN:
+                yield Math.cos(b);
+            }
+            case TAN -> {
                 values.push(a);
-                return Math.tan(b);
-            case EXP:
+                yield Math.tan(b);
+            }
+            case EXP -> {
                 values.push(a);
-                return Math.exp(b);
-            case LN:
+                yield Math.exp(b);
+            }
+            case LN -> {
                 values.push(a);
-                return Math.log(b);
-            default:
-                throw new IllegalArgumentException("Invalid operation");
-        }
+                yield Math.log(b);
+            }
+        };
     }
 
     private static Operations getOperation(char operator) {
-        switch (operator) {
-            case '+':
-                return Operations.ADDITION;
-            case '-':
-                return Operations.SUBTRACTION;
-            case '*':
-                return Operations.MULTIPLICATION;
-            case '/':
-                return Operations.DIVISION;
-            case 's':
-                return Operations.SIN;
-            case 'c':
-                return Operations.COS;
-            case 't':
-                return Operations.TAN;
-            case 'e':
-                return Operations.EXP;
-            case 'l':
-                return Operations.LN;
-            default:
-                throw new IllegalArgumentException("Invalid operator");
-        }
+        return switch (operator) {
+            case '+' -> Operations.ADDITION;
+            case '-' -> Operations.SUBTRACTION;
+            case '*' -> Operations.MULTIPLICATION;
+            case '/' -> Operations.DIVISION;
+            case 's' -> Operations.SIN;
+            case 'c' -> Operations.COS;
+            case 't' -> Operations.TAN;
+            case 'e' -> Operations.EXP;
+            case 'l' -> Operations.LN;
+            default -> throw new IllegalArgumentException("Invalid operator");
+        };
     }
 }

@@ -1,7 +1,6 @@
 package com.example.arithmeticexpressionparser;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ public class XMLHandler extends DefaultHandler {
     ArrayList<String> mathExpressions = new ArrayList<>();
     ArrayList<String> expressions = new ArrayList<>();
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
         if (qName.equals("item")) {
             String str = attributes.getValue("str");
             expressions.add(str);

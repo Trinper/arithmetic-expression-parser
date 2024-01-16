@@ -28,7 +28,7 @@ public class Model {
         return this.mathExpressions;
     }
     public ArrayList<String> getExpressions(){
-        return this.expressions;
+        return expressions;
     }
     public static void textFileReader(Scanner in, ArrayList<String> mathExpressions) {
         while(in.hasNextLine()){
